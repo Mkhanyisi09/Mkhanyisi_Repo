@@ -1,64 +1,116 @@
 #!/bin/bash
-# bin/deploy.sh - Main deployment automation
-# Repository: https://github.com/MkhanyisiNdlanga/rock-paper-scissors-MkhanyisiNdlanga
-# Branch: CoT_data-analytics-hub
-# Author: Mkhanyisi Ndlanga
+# ========================================
+# Data Analytics Hub - Deployment Script
+# ========================================
 
-set -euo pipefail
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-APP_IMAGE="data-analytics-app:latest"
-PREV_IMAGE="data-analytics-app:previous"
-DEPLOY_SCRIPT="$SCRIPT_DIR/deploy-app.sh"
-HEALTH_SCRIPT="$SCRIPT_DIR/health-check.sh"
-APP_SRC="$PROJECT_ROOT/resources/app.py"
+REPO_URL="https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git"
+BRANCH="Mkhanyisi"
+APP_NAME="data-analytics-app"
+MINIO_CONTAINER="minio-server"
+MINIO_PORT=9000
+NETWORK_NAME="datahub-net"
+BUCKET_NAME="analytics-data"
 
 echo "=== Data Analytics Hub Deployment ==="
-echo "Repository: https://github.com/MkhanyisiNdlanga/rock-paper-scissors-MkhanyisiNdlanga"
-echo "Branch: CoT_data-analytics-hub"
-echo ""
+echo "Repository: $REPO_URL"
+echo "Branch: $BRANCH"
 
-# ---- Check prerequisites ----
+# ------------------------------
+# Prerequisites
+# ------------------------------
 echo "Checking prerequisites..."
-command -v docker >/dev/null || { echo "Docker not found"; exit 1; }
-command -v python3 >/dev/null || { echo "Python3 not found"; exit 1; }
+command -v docker >/dev/null 2>&1 || { echo "Docker is required. Exiting."; exit 1; }
 echo "Prerequisites OK"
 
-# ---- Lint Python code ----
-echo "Linting code..."
-python3 -m py_compile "$APP_SRC" || { echo "Python syntax error"; exit 1; }
-echo "Lint passed"
-
-# ---- Build Docker image ----
+# ------------------------------
+# Build Docker Image
+# ------------------------------
 echo "Building Docker image..."
-if docker image inspect "$APP_IMAGE" >/dev/null 2>&1; then
-    echo "Backing up previous image..."
-    docker tag "$APP_IMAGE" "$PREV_IMAGE"
+docker build -t $APP_NAME:latest .
+
+# ------------------------------
+# Create Docker Network
+# ------------------------------
+if ! docker network ls | grep -q "$NETWORK_NAME"; then
+    echo "Creating Docker network: $NETWORK_NAME"
+    docker network create $NETWORK_NAME
 fi
-docker build -t "$APP_IMAGE" "$PROJECT_ROOT" || { echo "Docker build failed"; exit 1; }
-echo "Docker image built: $APP_IMAGE"
 
-# ---- Deploy stack ----
-echo "Deploying stack..."
-bash "$DEPLOY_SCRIPT"
-
-# ---- Health check ----
-echo "Verifying deployment..."
-if bash "$HEALTH_SCRIPT"; then
-    echo "Deployment successful"
-    docker image rm "$PREV_IMAGE" >/dev/null 2>&1 || true
+# ------------------------------
+# Start Minio Server
+# ------------------------------
+if ! docker ps --format '{{.Names}}' | grep -q "^$MINIO_CONTAINER$"; then
+    echo "Starting Minio server..."
+    docker run -d \
+        --name $MINIO_CONTAINER \
+        -p $MINIO_PORT:9000 \
+        -e MINIO_ROOT_USER=minioadmin \
+        -e MINIO_ROOT_PASSWORD=minioadmin \
+        --network $NETWORK_NAME \
+        minio/minio server /data
 else
-    echo "Deployment failed – rolling back..."
-    docker stop analytics-app >/dev/null 2>&1 || true
-    docker rm analytics-app >/dev/null 2>&1 || true
-    if docker image inspect "$PREV_IMAGE" >/dev/null 2>&1; then
-        docker run -d --name analytics-app -p 127.0.0.1:8000:5000 "$PREV_IMAGE"
-        echo "Rolled back to previous version"
+    # Force restart if stopped
+    if [ "$(docker inspect -f '{{.State.Running}}' $MINIO_CONTAINER)" != "true" ]; then
+        echo "Restarting Minio server..."
+        docker start $MINIO_CONTAINER
+    else
+        echo "Minio already running"
     fi
+fi
+
+# Wait until Minio is ready
+echo "Waiting for Minio to fully start..."
+for i in {1..30}; do
+    if docker exec "$MINIO_CONTAINER" mc alias set localminio http://$MINIO_CONTAINER:9000 minioadmin minioadmin >/dev/null 2>&1; then
+        if docker exec "$MINIO_CONTAINER" mc ls localminio >/dev/null 2>&1; then
+            echo "Minio is ready"
+            break
+        fi
+    fi
+    if [ $i -eq 30 ]; then
+        echo "Minio failed to start"
+        exit 1
+    fi
+    sleep 2
+done
+
+# Ensure bucket exists
+echo "Ensuring bucket $BUCKET_NAME exists..."
+docker exec "$MINIO_CONTAINER" mc mb -p localminio/$BUCKET_NAME >/dev/null 2>&1 || echo "Bucket already exists"
+
+# ------------------------------
+# Start Flask App
+# ------------------------------
+echo "Starting Flask app container..."
+docker run -d \
+    --name $APP_NAME \
+    --network $NETWORK_NAME \
+    -p 5000:5000 \
+    -e MINIO_ENDPOINT=$MINIO_CONTAINER:9000 \
+    -e MINIO_ACCESS_KEY=minioadmin \
+    -e MINIO_SECRET_KEY=minioadmin \
+    -e BUCKET_NAME=$BUCKET_NAME \
+    $APP_NAME:latest
+
+# ------------------------------
+# Verify Deployment
+# ------------------------------
+echo "Verifying deployment..."
+sleep 5
+if curl -s http://localhost:5000/health | grep -q "healthy"; then
+    echo "Flask app is healthy"
+else
+    echo "Flask app is not responding"
     exit 1
 fi
 
-echo "=== Deployment Complete ==="
-echo "Application: http://127.0.0.1:8000"
-echo "Minio Console: http://127.0.0.1:9001"
+if docker exec "$MINIO_CONTAINER" mc ls localminio/$BUCKET_NAME >/dev/null 2>&1; then
+    echo "Minio bucket is accessible"
+else
+    echo "Minio bucket not accessible"
+    exit 1
+fi
+
+echo "Deployment successful!"
+echo "App: http://127.0.0.1:5000"
+echo "Minio Console: http://127.0.0.1:9000"

@@ -1,26 +1,33 @@
 #!/bin/bash
-# bin/test.sh - Run unit tests and save logs
-# Repository: https://github.com/Mkhanyisi09/rock-paper-scissors-MkhanyisiNdlang
-# Branch: CoT_data-analytics-hub
-# Author: Mkhanyisi Ndlanga
+# ========================================
+# Data Analytics Hub - Test Script
+# ========================================
 
-set -euo pipefail
+LOG_DIR="$HOME/logs/data-app"
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+LOG_FILE="$LOG_DIR/test_$TIMESTAMP.log"
 
-# Paths
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-LOG_DIR="/var/log/data-app"
-LOG_FILE="$LOG_DIR/test_$(date +%Y%m%d_%H%M%S).log"
-
-# Make log directory if not exists
+# Ensure log directory exists
 mkdir -p "$LOG_DIR"
 
-echo "Running tests..."
-echo "Logs will be saved to $LOG_FILE"
+echo "Running tests..." | tee -a "$LOG_FILE"
 
-# Run pytest with verbose, capture output
-if pytest -v "$PROJECT_ROOT/tests/test_app.py" | tee "$LOG_FILE"; then
-    echo "All tests passed"
+# Run pytest and capture output
+pytest --maxfail=1 --disable-warnings --tb=short | tee -a "$LOG_FILE"
+
+# Capture exit code
+EXIT_CODE=${PIPESTATUS[0]}
+
+# Run health checks
+echo "" | tee -a "$LOG_FILE"
+echo "Running health checks..." | tee -a "$LOG_FILE"
+bash bin/health-check.sh | tee -a "$LOG_FILE"
+
+echo "" | tee -a "$LOG_FILE"
+if [ $EXIT_CODE -eq 0 ]; then
+    echo "All tests passed!" | tee -a "$LOG_FILE"
 else
-    echo "Some tests failed - check the log: $LOG_FILE"
+    echo "Some tests failed. Check log: $LOG_FILE" | tee -a "$LOG_FILE"
 fi
+
+exit $EXIT_CODE

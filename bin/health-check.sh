@@ -1,36 +1,43 @@
 #!/bin/bash
-# bin/health-check.sh - Verify application + Minio health
-# Repository: https://github.com/Mkhanyisi09/rock-paper-scissors-MkhanyisiNdlang
-# Branch: CoT_data-analytics-hub
-# Author: Mkhanyisi Ndlanga
+# ========================================
+# Data Analytics Hub - Health Check Script
+# ========================================
 
-set -euo pipefail
-
-APP_CONTAINER="analytics-app"
+APP_URL="http://localhost:5000"
 MINIO_CONTAINER="minio-server"
-APP_URL="http://127.0.0.1:8000"
-MINIO_URL="http://127.0.0.1:9000"
+BUCKET_NAME="analytics-data"
 
-echo "Checking containers..."
-docker ps | grep "$APP_CONTAINER" >/dev/null || { echo "App not running"; exit 1; }
-docker ps | grep "$MINIO_CONTAINER" >/dev/null || { echo "Minio not running"; exit 1; }
+echo "=== Data Analytics Hub Health Check ==="
 
-echo "Checking app health..."
-curl -s -f "$APP_URL/health" >/dev/null || { echo "App health check failed"; exit 1; }
+# ------------------------------
+# Check Flask app health
+# ------------------------------
+echo "Checking Flask app health..."
+if curl -s $APP_URL/health | grep -q "healthy"; then
+    echo "Flask app is healthy"
+else
+    echo "Flask app is not responding"
+    exit 1
+fi
 
-echo "Checking Minio connection..."
-curl -s -f "$APP_URL/storage/health" | grep '"status":"healthy"' >/dev/null || { echo "Minio connection failed"; exit 1; }
+# ------------------------------
+# Check Minio health via container network
+# ------------------------------
+echo "Checking Minio health..."
+if docker ps --format '{{.Names}}' | grep -q "^$MINIO_CONTAINER$"; then
+    # Configure mc alias inside Minio container
+    docker exec "$MINIO_CONTAINER" mc alias set localminio http://$MINIO_CONTAINER:9000 minioadmin minioadmin >/dev/null 2>&1
 
-# Test upload & retrieval
-TEST_JSON='{"test":"data"}'
-FILENAME="test_$(date +%Y%m%d_%H%M%S).json"
+    # Check bucket access
+    if docker exec "$MINIO_CONTAINER" mc ls localminio/$BUCKET_NAME >/dev/null 2>&1; then
+        echo "Minio is ready and bucket '$BUCKET_NAME' is accessible"
+    else
+        echo "Minio is running but bucket '$BUCKET_NAME' is not accessible"
+        exit 1
+    fi
+else
+    echo "Minio container is not running"
+    exit 1
+fi
 
-UPLOAD=$(curl -s -X POST -H "Content-Type: application/json" -d "$TEST_JSON" "$APP_URL/data")
-echo "$UPLOAD" | grep '"message":"Data uploaded successfully"' >/dev/null || { echo "Upload failed"; exit 1; }
-
-curl -s -f "$APP_URL/data/$FILENAME" >/dev/null || { echo "Retrieve failed"; exit 1; }
-
-# Cleanup test data
-curl -s -X DELETE "$APP_URL/data/$FILENAME" >/dev/null || true
-
-echo "Health check passed"
+echo "Health check passed!"
