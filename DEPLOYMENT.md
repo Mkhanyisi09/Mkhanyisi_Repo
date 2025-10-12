@@ -1,47 +1,118 @@
-# Data Analytics Hub - Deployment Instructions
-
 ## Prerequisites
-- Linux (Ubuntu 20.04+)
+- Linux (Ubuntu 24.04+)
 - Docker installed and running
 - Python 3.11+
 - Git
 
-## Deployment Steps
-1. Clone repository:
-git clone https://github.com/Mkhanyisi09/rock-paper-scissors-MkhanyisiNdlang
-git checkout CoT_data-analytics-hub
+DEPLOYMENT.md
+Data Analytics Hub - Deployment Guide
 
-2. Run deployment script:
-Run deployment script:
-3. Monitor logs:
-tail -f /var/log/data-app/deploy_errors.log
+This document provides the latest details for deploying the Data Analytics Hub - S3 Data Service application.
 
+1. Repository & Branch
 
-## Running Tests
+Repository: https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
 
+Branch: Mkhanyisi
 
-bin/test.sh
+2. Prerequisites
 
-## Post-deployment Verification
+Docker installed and running (Docker Desktop recommended for Windows)
 
+Python 3.11+ (used for testing scripts)
 
-bin/health-check.sh
+Git installed for version control
 
+Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
 
-## Rollback
-- If deployment fails, `deploy.sh` will automatically rollback to the previous image.
-- Check logs at `/var/log/data-app/deploy_errors.log`.
+3. Environment Configuration
+Minio (S3 Storage)
 
-## Troubleshooting
-1. **Docker not found**: Ensure Docker is installed (`sudo apt install docker.io`).
-2. **Python syntax error**: Fix errors in `resources/app.py`.
-3. **Minio not reachable**: Ensure the Minio container is running and ports 9000/9001 are free.
+Container Name: minio-server
 
-## Day 2 Operations
-- **Scenario**: Minio becomes unavailable while the app is running.
-- **Detection**: Health checks (`/storage/health`) will fail.
-- **Impact**: App cannot store/retrieve data.
-- **Recovery**:
-  - Restart Minio container: `docker restart minio-server`
-  - Re-run health checks
-  - Application resumes normal operation
+Ports: 9000 (API), 9001 (Web Console)
+
+Credentials:
+
+MINIO_ROOT_USER=minioadmin
+MINIO_ROOT_PASSWORD=minioadmin
+
+Bucket Name: analytics-data
+
+Network: datahub-net
+
+Flask App
+
+Container Name: data-analytics-app
+
+Port: 5000
+
+Network: datahub-net
+
+Environment Variables:
+
+MINIO_ENDPOINT=minio-server:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+BUCKET_NAME=analytics-data
+
+4. Deployment Steps
+
+1. Make scripts executable:
+chmod +x bin/*.sh
+
+2. Run deployment script
+bash bin/deploy.sh
+
+3. Check deployemnet output:
+* Flask app health
+* Minio bucket accessible
+
+4. Acces service:
+
+* Flask API: http://127.0.0.1:5000
+* Minio Console: http://127.0.0.1:9000
+
+5. Health Check
+I used the health check script to verify Services:
+
+bash bin/health-check.sh
+
+Expected output:
+
+* Flask app is healthy
+* Minio bucket is accessible
+
+Testing 
+
+Run automated tests:
+bash bin/test.sh
+
+* Logs saved to logs/data-app/
+* Test coverage includes: health endpoints, storage connections, upload/list/delete of files.
+
+7. Notes & Recommendations
+
+* Minio credentials are default (minioadmin:minioadmin) — change for production
+
+* Docker containers must be unique in name; remove old containers if conflicts occur:
+
+docker rm -f minio-server data-analytics-app
+
+* Bucket analytics-data is created automatically if missing
+
+* Flask app now reuses S3 client to avoid connection overhead
+
+8 Git Operations
+1. Stage and commit changes:
+
+git add
+git commit -m "Update deployment scripts and documentation"
+
+2. Push to Github:
+
+git push origin Mkhanyisi
+
+3. Share repository link with the City of Cape Town:
+
+https://github.com/Mkhanyisi09/Mkhanyisi_Repo
