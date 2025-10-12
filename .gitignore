@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.env
+
+# Logs
+/var/log/data-app/
+
+# Docker
+*.log
+*.env
+*.tar
+*.tmp
+
+# VS Code / IDE
+.vscode/
+.idea/

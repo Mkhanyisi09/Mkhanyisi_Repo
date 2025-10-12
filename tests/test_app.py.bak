@@ -1,0 +1,8 @@
+#!/bin/bash
+# bin/test.sh - Run pytest
+# Repository: https://github.com/MkhanyisiNdlanga/rock-paper-scissors-MkhanyisiNdlanga
+
+set -e
+
+pytest tests/test_app.py -v
+echo "Tests passed"

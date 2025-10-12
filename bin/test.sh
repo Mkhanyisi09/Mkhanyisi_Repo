@@ -1,0 +1,26 @@
+#!/bin/bash
+# bin/test.sh - Run unit tests and save logs
+# Repository: https://github.com/Mkhanyisi09/rock-paper-scissors-MkhanyisiNdlang
+# Branch: CoT_data-analytics-hub
+# Author: Mkhanyisi Ndlanga
+
+set -euo pipefail
+
+# Paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+LOG_DIR="/var/log/data-app"
+LOG_FILE="$LOG_DIR/test_$(date +%Y%m%d_%H%M%S).log"
+
+# Make log directory if not exists
+mkdir -p "$LOG_DIR"
+
+echo "Running tests..."
+echo "Logs will be saved to $LOG_FILE"
+
+# Run pytest with verbose, capture output
+if pytest -v "$PROJECT_ROOT/tests/test_app.py" | tee "$LOG_FILE"; then
+    echo "All tests passed"
+else
+    echo "Some tests failed - check the log: $LOG_FILE"
+fi
