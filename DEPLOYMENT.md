@@ -5,17 +5,6 @@
 - Python 3.11+
 - Git
 
-- docker --version
-docker info
-
-* Python: Version 3.11+ (used for testing and scripts)
-  
-python --version
-
-* Git Installed for version control
-
-  python --version
-
 
 ## DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
