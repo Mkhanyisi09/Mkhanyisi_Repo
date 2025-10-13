@@ -113,6 +113,4 @@ git commit -m "Update deployment scripts and documentation"
 
 git push origin Mkhanyisi
 
-3. Share repository link with the City of Cape Town:
 
-https://github.com/Mkhanyisi09/Mkhanyisi_Repo
