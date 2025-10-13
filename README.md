@@ -1,31 +1,47 @@
-Data Analytics Hub - S3 Data Service
+# Data Analytics Hub – S3 Data Service
+
+This repository contains the Data Analytics Hub – S3 Data Service, a containerized microservice designed to manage data ingestion, storage, and retrieval using **Flask** and **MinIO (S3-compatible object storage).  
+
+The project demonstrates modern DevOps principles including containerization, automation scripts, health checks, and testing.
 
 
-The application is built using a modern containerized architecture with the following components:
+## Project Overview
 
-1. **Flask API Service**
-   - Handles HTTP requests for uploading, listing, retrieving, and deleting data.
-   - Connects to Minio S3 storage for all data persistence.
-   - Runs in its own Docker container (`data-analytics-app`).
+The **Data Analytics Hub – S3 Data Service** provides:
+- A Flask API for uploading, listing, and deleting analytical data files.
+- An integrated **MinIO server** acting as local S3 storage.
+- Automated deployment and health-check scripts.
+- Support for testing, logging, and container networking.
 
-2. **Minio Object Storage**
-   - S3-compatible storage solution running in a Docker container (`minio-server`).
-   - Stores all JSON data uploaded via the Flask API.
-   
+## Tech Stack
 
-3. **Docker Network**
-   - `datahub-net` is a custom Docker bridge network.
-   - Ensures secure communication between the Flask app and Minio.
+| Component | Description |
+|------------|--------------|
+| **Python (Flask)** | Web service and API endpoints |
+| **MinIO** | Local S3-compatible object storage |
+| **Docker** | Containerization and orchestration |
+| **Bash scripts** | Deployment, health checks, and testing |
+| **GitHub** | Version control and repository management |
 
-4. **Local and Cloud Storage**
-   - Minio serves as local object storage (can be extended to cloud S3 later).
-   - Data files are uniquely named with timestamps for easy versioning.
+---
 
-5. **Health & Monitoring**
-   - Flask app has `/health` and `/storage/health` endpoints.
-   - Minio is monitored via container status and the `mc` CLI alias.
+## Repository Structure
 
-# Architecture ( ASCII)
+Mkhanyisi_Repo/
+├── bin/
+│ ├── deploy.sh # Deployment script
+│ ├── health-check.sh # Health validation script
+│ └── test.sh # Automated testing script
+├── app/
+│ ├── main.py # Flask app entry point
+│ ├── s3_client.py # S3 connection and operations
+│ └── requirements.txt # Python dependencies
+├── logs/
+│ └── data-app/ # Application logs
+├── DEPLOYMENT.md # Full deployment documentation
+└── README.md # Project overview and quick start
+
+## Architecture ( ASCII)
 
 +-------------------+ +-------------------+
 | Flask App | <---> | Minio Storage |
@@ -39,7 +55,7 @@ Users/Clients Admin/Monitoring
 
 
 
-Repository & Branch
+## Repository & Branch
 
 
 * Repository: https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
@@ -47,17 +63,17 @@ Repository & Branch
 * Branch: Mkhanyisi merged with main Branch on github
 
 
-Prerequisites
+## Prerequisites
 
 Docker (Desktop recommended for Windows)
 
 Python 3.11+ (for tests)
 
-Git
+## Git
 
 Network configuration: ensure Docker networks exist (datahub-net)
 
-Deployment
+## Deployment
 
 1. Make scripts executable:
 
@@ -83,7 +99,7 @@ bash bin/deploy.sh
 
 * Minio Web Console: http://127.0.0.1:9000
 
-Health Check
+## Health Check
 
 Verify service with:
 
@@ -94,7 +110,7 @@ Expected output:
 * Flask app is healthy
 * Minio bucket is accessible
 
-Testing 
+## Testing 
 
 Run automated Testing:
 
@@ -104,7 +120,7 @@ bash bin/test.sh
 * Tests cover health endpoints, storage connection, upload/list/delete of files
 
 
-Day 2 Operations
+## Day 2 Operations
 Scenario: If Minio becomes unavailable while the app is running
 
 Impact:
