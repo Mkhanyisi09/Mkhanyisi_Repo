@@ -148,11 +148,6 @@ Recommendations:
 * Set up health monitoring and alerts for Minio
 * Consider backup strategies to avoid data loss
 
-Access
-
-Flask App: http://127.0.0.1:5000
-
-Minio Web Console: http://127.0.0.1:9000
 
 
 
