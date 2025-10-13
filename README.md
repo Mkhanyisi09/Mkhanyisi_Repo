@@ -129,13 +129,13 @@ Flask application will continue running but cannot perform storage operations (u
 
 Any requests that interact with S3 will fail with 503 errors
 
-Detection:
+## Detection:
 
 Monitor /storage/health endpoint (GET /storage/health)
 
 Logs will show connection errors when S3 client fails
 
-Recovery Steps:
+## Recovery Steps:
 
 1. Restart Minio container:
 
@@ -151,7 +151,7 @@ docker run -d --name minio-server \
   quay.io/minio/minio server /data --console-address ":9001"
   
   
-  2. ensure bucket exists:
+  2. Ensure bucket exists:
   
   docker exec minio-server mc alias set localminio http://minio-server:9000 minioadmin minioadmin
 docker exec minio-server mc mb localminio/analytics-data
@@ -159,7 +159,7 @@ docker exec minio-server mc mb localminio/analytics-data
 
 3. Application will resume normal operations once storage is available.
 
-Recommendations:
+## Recommendations:
 
 * Set up health monitoring and alerts for Minio
 * Consider backup strategies to avoid data loss
