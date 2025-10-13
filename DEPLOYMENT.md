@@ -17,7 +17,7 @@ python --version
   python --version
 
 
-DEPLOYMENT.md
+## DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
 
 This document provides the latest details for deploying the Data Analytics Hub - S3 Data Service application.
@@ -36,7 +36,7 @@ Python 3.11+ (used for testing scripts)
 
 Git installed for version control
 
-Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
+## Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
 
 3. Environment Configuration
 Minio (S3 Storage)
@@ -45,7 +45,7 @@ Container Name: minio-server
 
 Ports: 9000 (API), 9001 (Web Console)
 
-Credentials:
+## Credentials:
 
 MINIO_ROOT_USER=minioadmin
 MINIO_ROOT_PASSWORD=minioadmin
@@ -54,7 +54,7 @@ Bucket Name: analytics-data
 
 Network: datahub-net
 
-Flask App
+## Flask App
 
 Container Name: data-analytics-app
 
@@ -96,7 +96,7 @@ Expected output:
 * Flask app is healthy
 * Minio bucket is accessible
 
-Testing 
+## Testing 
 
 Run automated tests:
 bash bin/test.sh
