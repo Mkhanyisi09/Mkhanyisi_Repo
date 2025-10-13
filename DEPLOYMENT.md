@@ -1,8 +1,21 @@
 ## Prerequisites
-- Linux (Ubuntu 24.04+)
+- Windows 10/11 using Docker Desktop with WSL2 Linux Engine enabled
+- (Alternatively: Ubuntu 24.04+)
 - Docker installed and running
 - Python 3.11+
 - Git
+
+- docker --version
+docker info
+
+* Python: Version 3.11+ (used for testing and scripts)
+  
+python --version
+
+* Git Installed for version control
+
+  python --version
+
 
 DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
@@ -112,5 +125,14 @@ git commit -m "Update deployment scripts and documentation"
 2. Push to Github:
 
 git push origin Mkhanyisi
+
+9. Troubleshoot
+    | Issue                            | Fix                                                                                            |                                        |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------- |
+| **Port already in use**          | `netstat -ano                                                                                  | findstr 5000`→`taskkill /PID <pid> /F` |
+| **Container name conflict**      | `docker rm -f minio-server data-analytics-app`                                                 |                                        |
+| **Flask app cannot reach MinIO** | Ensure both containers are on the same Docker network:<br>`docker network inspect datahub-net` |                                        |
+| **WSL or Docker not starting**   | Restart Docker Desktop and ensure WSL integration is enabled for your Linux distro             |                                        |
+
 
 
