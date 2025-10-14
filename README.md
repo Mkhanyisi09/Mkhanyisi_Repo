@@ -43,15 +43,16 @@ Mkhanyisi_Repo/
 
 ## Architecture ( ASCII)
 
-+-------------------+ +-------------------+
-| Flask App | <---> | Minio Storage |
-| (data-analytics) | | (S3, bucket) |
-+-------------------+ +-------------------+
-^ ^
-| |
-HTTP/API S3 API
-| |
-Users/Clients Admin/Monitoring
++-------------------+           +-------------------+
+|     Flask App     | <-------> |   MinIO Storage   |
+|  (data-analytics) |           |     (S3 bucket)   |
++-------------------+           +-------------------+
+       ^     ^
+       |     |
+    HTTP    S3 API
+       |     |
+  Users / Clients   Admin / Monitoring
+
 
 
 
