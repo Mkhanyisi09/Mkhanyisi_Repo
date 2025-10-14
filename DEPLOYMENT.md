@@ -1,5 +1,5 @@
 ## Prerequisites
-- Windows 10/11 using Docker Desktop with WSL2 Linux Engine enabled
+- Windows 11 using Docker Desktop with WSL2 Linux Engine enabled
 - (Alternatively: Ubuntu 24.04+)
 - Docker installed and running
 - Python 3.11+
@@ -17,17 +17,9 @@ Repository: https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
 
 Branch: Mkhanyisi
 
-2. Prerequisites
-
-Docker installed and running (Docker Desktop recommended for Windows)
-
-Python 3.11+ (used for testing scripts)
-
-Git installed for version control
-
 ## Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
 
-3. Environment Configuration
+2. Environment Configuration
 Minio (S3 Storage)
 
 Container Name: minio-server
@@ -58,7 +50,7 @@ MINIO_ACCESS_KEY=minioadmin
 MINIO_SECRET_KEY=minioadmin
 BUCKET_NAME=analytics-data
 
-4. Deployment Steps
+## Deployment Steps
 
 1. Make scripts executable:
 chmod +x bin/*.sh
@@ -66,21 +58,21 @@ chmod +x bin/*.sh
 2. Run deployment script
 bash bin/deploy.sh
 
-3. Check deployemnet output:
+## Check deployemnet output:
 * Flask app health
 * Minio bucket accessible
 
-4. Acces service:
+## Acces service
 
 * Flask API: http://127.0.0.1:5000
 * Minio Console: http://127.0.0.1:9000
 
-5. Health Check
+## Health Check
 I used the health check script to verify Services:
 
 bash bin/health-check.sh
 
-Expected output:
+## Expected output
 
 * Flask app is healthy
 * Minio bucket is accessible
@@ -93,7 +85,7 @@ bash bin/test.sh
 * Logs saved to logs/data-app/
 * Test coverage includes: health endpoints, storage connections, upload/list/delete of files.
 
-7. Notes & Recommendations
+## Notes & Recommendations
 
 * Minio credentials are default (minioadmin:minioadmin) — change for production
 
@@ -105,7 +97,8 @@ docker rm -f minio-server data-analytics-app
 
 * Flask app now reuses S3 client to avoid connection overhead
 
-8 Git Operations
+## Git Operations
+
 1. Stage and commit changes:
 
 git add
@@ -115,7 +108,7 @@ git commit -m "Update deployment scripts and documentation"
 
 git push origin Mkhanyisi
 
-9. Troubleshoot
+## Troubleshoot
     | Issue                            | Fix                                                                                            |                                        |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------- |
 | **Port already in use**          | `netstat -ano                                                                                  | findstr 5000`→`taskkill /PID <pid> /F` |
