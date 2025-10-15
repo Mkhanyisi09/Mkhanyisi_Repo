@@ -1,6 +1,6 @@
 # Data Analytics Hub – S3 Data Service
 
-This repository contains the Data Analytics Hub – S3 Data Service, a containerized microservice designed to manage data ingestion, storage, and retrieval using **Flask** and **MinIO (S3-compatible object storage).  
+This repository contains the Data Analytics Hub – S3 Data Service, a containerized microservice designed to manage data ingestion, storage, and retrieval using Flask and MinIO (S3-compatible object storage).  
 
 The project demonstrates modern DevOps principles including containerization, automation scripts, health checks, and testing.
 
