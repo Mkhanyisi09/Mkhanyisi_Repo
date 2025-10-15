@@ -52,12 +52,20 @@ Mkhanyisi_Repo/
     HTTP    S3 API
        |     |
   Users / Clients   Admin / Monitoring
+  
+  ## REST API Endpoints
 
-
+  | Endpoint           | Method     | Description                                         |
+| ------------------ | ---------- | --------------------------------------------------- |
+| `/data`            | **POST**   | Uploads a data file to the MinIO S3 bucket          |
+| `/data`            | **GET**    | Lists all files stored in the analytics-data bucket |
+| `/data/<filename>` | **GET**    | Retrieves a specific file from S3                   |
+| `/data/<filename>` | **DELETE** | Deletes a file from the S3 bucket                   |
+| `/health`          | **GET**    | Checks the health of the Flask API                  |
+| `/storage/health`  | **GET**    | Validates MinIO storage connectivity                |
 
 
 ## Repository & Branch
-
 
 * Repository: https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
 
