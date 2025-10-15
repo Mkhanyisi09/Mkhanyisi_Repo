@@ -1,6 +1,5 @@
 ## Prerequisites
 - Windows 11 using Docker Desktop with WSL2 Linux Engine enabled
-- (Alternatively: Ubuntu 24.04+)
 - Docker installed and running
 - Python 3.11+
 - Git
