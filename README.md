@@ -6,10 +6,10 @@ The project demonstrates modern DevOps principles including containerization, au
 
 ## Important Environment Note
 
-Environment Compatibility:
-This solution was developed and tested primarily on Windows using Docker Desktop due to limited access to a Linux environment.
-The deployment and automation scripts (bash scripts) are fully POSIX 1003.1-compliant and have been designed to work natively on Linux (Ubuntu 20.04+) without modification. Minimal adjustments may be required for path conventions or permissions when running on Linux.
-Docker ensures consistent container behavior across different operating systems.
+**Environment Compatibility:
+This solution was developed and tested on Windows using Docker Desktop with the Linux (WSL2) engine enabled.
+This setup provides a Linux-like environment, ensuring that all bash scripts (deploy.sh, health-check.sh, test.sh) and Docker containers behave as they would on native Linux (Ubuntu 20.04+).
+The deployment is fully POSIX-compliant, and minimal adjustments may be required for file paths or permissions when running on other Linux distributions.
 
 
 ## Project Overview
