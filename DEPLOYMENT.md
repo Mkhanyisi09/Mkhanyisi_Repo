@@ -90,11 +90,13 @@ bash bin/test.sh
 
 * Docker containers must be unique in name; remove old containers if conflicts occur:
 
-docker rm -f minio-server data-analytics-app
+  docker rm -f minio-server data-analytics-app
 
 * Bucket analytics-data is created automatically if missing
 
 * Flask app now reuses S3 client to avoid connection overhead
+* Use Sumo Logic for centralized logging and monitoring of application and container logs.
+* Use Bitwarden to securely manage and store sensitive credentials such as MinIO credentials and Sumo Logic tokens.
 
 ## Git Operations
 
