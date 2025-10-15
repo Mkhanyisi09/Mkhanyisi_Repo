@@ -1,43 +1,64 @@
 #!/bin/bash
 # ========================================
-# Data Analytics Hub - Health Check Script
+# Data Analytics Hub - Robust Health Check Script
+# Author: Mkhanyisi Ndlanga
+# Features: Logging, retries, environment overrides
 # ========================================
 
-APP_URL="http://localhost:5000"
-MINIO_CONTAINER="minio-server"
-BUCKET_NAME="analytics-data"
+set -euo pipefail
 
-echo "=== Data Analytics Hub Health Check ==="
+APP_URL="${APP_URL:-http://localhost:5000}"
+MINIO_CONTAINER="${MINIO_CONTAINER:-minio-server}"
+BUCKET_NAME="${BUCKET_NAME:-analytics-data}"
+LOG_FILE="./logs/health-check.log"
+
+mkdir -p ./logs
+echo "=== Health Check started at $(date) ===" | tee -a $LOG_FILE
 
 # ------------------------------
 # Check Flask app health
 # ------------------------------
-echo "Checking Flask app health..."
-if curl -s $APP_URL/health | grep -q "healthy"; then
-    echo "Flask app is healthy"
-else
-    echo "Flask app is not responding"
-    exit 1
-fi
+echo "Checking Flask app health at $APP_URL..." | tee -a $LOG_FILE
+for i in $(seq 1 5); do
+    if curl -s "$APP_URL/health" | grep -q "healthy"; then
+        echo "Flask app is healthy" | tee -a $LOG_FILE
+        break
+    else
+        echo "Flask app not responding, retrying... ($i/5)" | tee -a $LOG_FILE
+        sleep 2
+    fi
+    if [ "$i" -eq 5 ]; then
+        echo "Flask app failed health check" | tee -a $LOG_FILE
+        exit 1
+    fi
+done
 
 # ------------------------------
-# Check Minio health via container network
+# Check Minio health
 # ------------------------------
-echo "Checking Minio health..."
+echo "Checking Minio container '$MINIO_CONTAINER'..." | tee -a $LOG_FILE
 if docker ps --format '{{.Names}}' | grep -q "^$MINIO_CONTAINER$"; then
     # Configure mc alias inside Minio container
     docker exec "$MINIO_CONTAINER" mc alias set localminio http://$MINIO_CONTAINER:9000 minioadmin minioadmin >/dev/null 2>&1
 
-    # Check bucket access
-    if docker exec "$MINIO_CONTAINER" mc ls localminio/$BUCKET_NAME >/dev/null 2>&1; then
-        echo "Minio is ready and bucket '$BUCKET_NAME' is accessible"
-    else
-        echo "Minio is running but bucket '$BUCKET_NAME' is not accessible"
-        exit 1
-    fi
+    # Retry bucket access
+    for i in $(seq 1 5); do
+        if docker exec "$MINIO_CONTAINER" mc ls localminio/$BUCKET_NAME >/dev/null 2>&1; then
+            echo "Minio is running and bucket '$BUCKET_NAME' is accessible" | tee -a $LOG_FILE
+            break
+        else
+            echo "Bucket '$BUCKET_NAME' not accessible, retrying... ($i/5)" | tee -a $LOG_FILE
+            sleep 2
+        fi
+        if [ "$i" -eq 5 ]; then
+            echo "Minio bucket health check failed" | tee -a $LOG_FILE
+            exit 1
+        fi
+    done
 else
-    echo "Minio container is not running"
+    echo "Minio container '$MINIO_CONTAINER' is not running" | tee -a $LOG_FILE
     exit 1
 fi
 
-echo "Health check passed!"
+echo "Health check passed!" | tee -a $LOG_FILE
+exit 0
