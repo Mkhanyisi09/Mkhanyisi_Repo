@@ -71,17 +71,6 @@ Mkhanyisi_Repo/
 
 * Branch: Mkhanyisi merged with main Branch on github
 
-
-## Prerequisites
-
-Docker (Desktop recommended for Windows)
-
-Python 3.11+ (for tests)
-
-## Git
-
-Network configuration: ensure Docker networks exist (datahub-net)
-
 ## Deployment
 
 1. Make scripts executable:
