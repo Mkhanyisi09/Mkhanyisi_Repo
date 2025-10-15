@@ -164,6 +164,8 @@ docker exec minio-server mc mb localminio/analytics-data
 
 * Set up health monitoring and alerts for Minio
 * Consider backup strategies to avoid data loss
+* * Use Sumo Logic for centralized logging and monitoring of application and container logs.
+* Use Bitwarden to securely manage and store sensitive credentials such as MinIO credentials and Sumo Logic tokens.
 
 
 
