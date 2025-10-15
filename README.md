@@ -4,6 +4,13 @@ This repository contains the Data Analytics Hub – S3 Data Service, a container
 
 The project demonstrates modern DevOps principles including containerization, automation scripts, health checks, and testing.
 
+## Important Environment Note
+
+Environment Compatibility:
+This solution was developed and tested primarily on Windows using Docker Desktop due to limited access to a Linux environment.
+The deployment and automation scripts (bash scripts) are fully POSIX 1003.1-compliant and have been designed to work natively on Linux (Ubuntu 20.04+) without modification. Minimal adjustments may be required for path conventions or permissions when running on Linux.
+Docker ensures consistent container behavior across different operating systems.
+
 
 ## Project Overview
 
