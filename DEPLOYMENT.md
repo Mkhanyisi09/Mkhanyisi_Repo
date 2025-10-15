@@ -3,6 +3,7 @@
 - Docker installed and running
 - Python 3.14.0
 - Git
+
 Note: Due to limited access to a dedicated Linux environment, Docker Desktop with the Linux engine was used. This setup provides a Linux-like environment, ensuring all bash scripts and Docker containers behave consistently as they would on native Linux (Ubuntu 20.04+).
 
 ## DEPLOYMENT.md
