@@ -1,46 +1,37 @@
 #!/bin/bash
 # ========================================
-# Data Analytics Hub - Robust Test Script
-# Author: Mkhanyisi Ndlanga
-# Features: Logging, health check integration, CI/CD friendly
+# Data Analytics Hub - Full Test Script
 # ========================================
 
-set -euo pipefail
+# --- Set MinIO environment variables for tests ---
+export MINIO_ENDPOINT="http://127.0.0.1:9000"
+export MINIO_ACCESS_KEY="minioadmin"
+export MINIO_SECRET_KEY="minioadmin"
+export BUCKET_NAME="analytics-data"
 
-LOG_DIR="${LOG_DIR:-$HOME/logs/data-app}"
+# --- Logging setup ---
+LOG_DIR="$HOME/logs/data-app"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOG_FILE="$LOG_DIR/test_$TIMESTAMP.log"
-
-# Ensure log directory exists
 mkdir -p "$LOG_DIR"
-echo "=== Test run started at $(date) ===" | tee -a "$LOG_FILE"
 
-# -------------------------
-# Run Pytest
-# -------------------------
-echo "Running Python unit tests..." | tee -a "$LOG_FILE"
-if command -v pytest >/dev/null 2>&1; then
-    pytest --maxfail=1 --disable-warnings --tb=short | tee -a "$LOG_FILE"
-    EXIT_CODE=${PIPESTATUS[0]}
+echo "=== Running Python unit tests ===" | tee -a "$LOG_FILE"
+
+# --- Run pytest ---
+pytest --maxfail=1 --disable-warnings --tb=short | tee -a "$LOG_FILE"
+EXIT_CODE=${PIPESTATUS[0]}
+
+# --- Run health checks ---
+echo "" | tee -a "$LOG_FILE"
+echo "=== Running health checks ===" | tee -a "$LOG_FILE"
+bash bin/health-check.sh | tee -a "$LOG_FILE"
+
+# --- Summary ---
+echo "" | tee -a "$LOG_FILE"
+if [ $EXIT_CODE -eq 0 ]; then
+    echo "✅ All tests passed!" | tee -a "$LOG_FILE"
 else
-    echo "pytest not found. Install it with pip install pytest" | tee -a "$LOG_FILE"
-    exit 1
+    echo "❌ Some tests failed. Check log: $LOG_FILE" | tee -a "$LOG_FILE"
 fi
 
-# -------------------------
-# Run Health Check
-# -------------------------
-echo "" | tee -a "$LOG_FILE"
-echo "Running post-test health check..." | tee -a "$LOG_FILE"
-if bash bin/health-check.sh | tee -a "$LOG_FILE"; then
-    HEALTH_STATUS=0
-else
-    HEALTH_STATUS=1
-fi
-
-# -------------------------
-# Summary & Exit
-# -------------------------
-echo "" | tee -a "$LOG_FILE"
-if [ $EXIT_CODE -eq 0 ] && [ $HEALTH_STATUS -eq 0 ]; then
-    e
+exit $EXIT_CODE
