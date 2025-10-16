@@ -26,7 +26,7 @@ git clone https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
 cd Mkhanyisi_Repo
 git checkout Mkhanyisi
 
-<<<<<<< HEAD
+
 ## Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
 
 2. Environment Configuration
@@ -60,12 +60,12 @@ MINIO_ENDPOINT=minio-server:9000
 ## Set environment variables
 Created a .env file in the root of the repo.
 MINIO_ENDPOINT=http://127.0.0.1:9000
->>>>>>> Mkhanyisi
+Mkhanyisi
 MINIO_ACCESS_KEY=minioadmin
 MINIO_SECRET_KEY=minioadmin
 BUCKET_NAME=analytics-data
 
-<<<<<<< HEAD
+
 ## Deployment Steps
 
 1. Make scripts executable:
@@ -108,27 +108,26 @@ bash bin/deploy.sh
 
 ## Run Tests
 
->>>>>>> Mkhanyisi
 bash bin/test.sh
 
 * Runs unit tests & health checks
 * Logs output in ~/logs/data-app
 
-<<<<<<< HEAD
+
 ## Notes & Recommendations
 =======
 ## Verify deployent
->>>>>>> Mkhanyisi
+
 
 * Flask app: http://127.0.0.1:5000
 
 * MinIO Console: http://127.0.0.1:9000
 
-<<<<<<< HEAD
+
   docker rm -f minio-server data-analytics-app
 =======
 ## RollBack ( If needed)
->>>>>>> Mkhanyisi
+
 
 docker rm -f data-analytics-app
 docker rm -f minio-server
@@ -138,14 +137,14 @@ bash bin/deploy.sh
 
 ## Troubleshooting
 
-<<<<<<< HEAD
+
 
 ## Git Operations
 
 1. Stage and commit changes:
 =======
 1. Port in use: Stop conflicting container or change ports in deploy.sh.
->>>>>>> Mkhanyisi
+
 
 2. MinIO not accessible: Check .env variables.
 
@@ -153,7 +152,7 @@ bash bin/deploy.sh
 
 docker logs data-analytics-app
 
-<<<<<<< HEAD
+
 ## Troubleshoot
     | Issue                            | Fix                                                                                            |                                        |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------- |
@@ -173,5 +172,5 @@ Detected via bin/health-check.sh
 Recover:
 docker restart minio-server
 bash bin/health-check.sh
->>>>>>> Mkhanyisi
+
 
