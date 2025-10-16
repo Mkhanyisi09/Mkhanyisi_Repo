@@ -4,19 +4,28 @@
 - Python 3.14.0
 - Git
 
+<<<<<<< HEAD
 Note: Due to limited access to a dedicated Linux environment, Docker Desktop with the Linux engine was used. This setup provides a Linux-like environment, ensuring all bash scripts and Docker containers behave consistently as they would on native Linux (Ubuntu 20.04+).
 
 ## DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
+=======
+>>>>>>> Mkhanyisi
 
-This document provides the latest details for deploying the Data Analytics Hub - S3 Data Service application.
+## Repository & Branch
 
-1. Repository & Branch
+- Repository: `https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git`
+- Branch: `Mkhanyisi`
 
-Repository: https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
+## Deployment Steps
 
-Branch: Mkhanyisi
+### 1. Clone repository
+```bash
+git clone https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
+cd Mkhanyisi_Repo
+git checkout Mkhanyisi
 
+<<<<<<< HEAD
 ## Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
 
 2. Environment Configuration
@@ -46,10 +55,16 @@ Network: datahub-net
 Environment Variables:
 
 MINIO_ENDPOINT=minio-server:9000
+=======
+## Set environment variables
+Created a .env file in the root of the repo.
+MINIO_ENDPOINT=http://127.0.0.1:9000
+>>>>>>> Mkhanyisi
 MINIO_ACCESS_KEY=minioadmin
 MINIO_SECRET_KEY=minioadmin
 BUCKET_NAME=analytics-data
 
+<<<<<<< HEAD
 ## Deployment Steps
 
 1. Make scripts executable:
@@ -80,35 +95,64 @@ bash bin/health-check.sh
 ## Testing 
 
 Run automated tests:
+=======
+## Deploy the stack
+bash bin/deploy.sh
+
+* Builds Flask app image
+* Start MinIO Container
+* Creates bucket analytics-data
+* Starts Flacks app Container
+* Verifies Services
+
+## Run Tests
+
+>>>>>>> Mkhanyisi
 bash bin/test.sh
 
-* Logs saved to logs/data-app/
-* Test coverage includes: health endpoints, storage connections, upload/list/delete of files.
+* Runs unit tests & health checks
+* Logs output in ~/logs/data-app
 
+<<<<<<< HEAD
 ## Notes & Recommendations
+=======
+## Verify deployent
+>>>>>>> Mkhanyisi
 
-* Minio credentials are default (minioadmin:minioadmin) — change for production
+* Flask app: http://127.0.0.1:5000
 
-* Docker containers must be unique in name; remove old containers if conflicts occur:
+* MinIO Console: http://127.0.0.1:9000
 
+<<<<<<< HEAD
   docker rm -f minio-server data-analytics-app
+=======
+## RollBack ( If needed)
+>>>>>>> Mkhanyisi
 
-* Bucket analytics-data is created automatically if missing
+docker rm -f data-analytics-app
+docker rm -f minio-server
+docker network rm datahub-net
+docker volume rm minio-data
+bash bin/deploy.sh
 
-* Flask app now reuses S3 client to avoid connection overhead
+## Troubleshooting
 
+<<<<<<< HEAD
 
 ## Git Operations
 
 1. Stage and commit changes:
+=======
+1. Port in use: Stop conflicting container or change ports in deploy.sh.
+>>>>>>> Mkhanyisi
 
-git add
-git commit -m "Update deployment scripts and documentation"
+2. MinIO not accessible: Check .env variables.
 
-2. Push to Github:
+3. Flask app not responding: Check logs:
 
-git push origin Mkhanyisi
+docker logs data-analytics-app
 
+<<<<<<< HEAD
 ## Troubleshoot
     | Issue                            | Fix                                                                                            |                                        |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------- |
@@ -118,4 +162,15 @@ git push origin Mkhanyisi
 | **WSL or Docker not starting**   | Restart Docker Desktop and ensure WSL integration is enabled for your Linux distro             |                                        |
 
 
+=======
+## Day 2 Operations
+
+MinIO becomes unavailable
+
+Detected via bin/health-check.sh
+
+Recover:
+docker restart minio-server
+bash bin/health-check.sh
+>>>>>>> Mkhanyisi
 
