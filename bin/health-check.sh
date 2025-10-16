@@ -14,9 +14,9 @@ echo "[INFO] === Data Analytics Hub Health Check ==="
 # ------------------------------
 echo "[INFO] Checking Flask app health at $APP_URL..."
 if curl -s $APP_URL/health | grep -q "healthy"; then
-    echo "[INFO] Flask app is healthy ✅"
+    echo "[INFO] Flask app is healthy "
 else
-    echo "[ERROR] Flask app is not responding ❌"
+    echo "[ERROR] Flask app is not responding "
     exit 1
 fi
 
@@ -30,14 +30,14 @@ if docker ps --format '{{.Names}}' | grep -q "^$MINIO_CONTAINER$"; then
 
     # Check bucket
     if docker exec "$MINIO_CONTAINER" mc ls localminio/$BUCKET_NAME >/dev/null 2>&1; then
-        echo "[INFO] MinIO is running and bucket '$BUCKET_NAME' is accessible ✅"
+        echo "[INFO] MinIO is running and bucket '$BUCKET_NAME' is accessible "
     else
-        echo "[ERROR] MinIO bucket '$BUCKET_NAME' is not accessible ❌"
+        echo "[ERROR] MinIO bucket '$BUCKET_NAME' is not accessible "
         exit 1
     fi
 else
-    echo "[ERROR] MinIO container '$MINIO_CONTAINER' is not running ❌"
+    echo "[ERROR] MinIO container '$MINIO_CONTAINER' is not running "
     exit 1
 fi
 
-echo "[INFO] Health check passed! ✅"
+echo "[INFO] Health check passed! "
