@@ -11,7 +11,6 @@
 ## DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
 =======
-Mkhanyisi
 
 ## Repository & Branch
 
@@ -57,7 +56,7 @@ Environment Variables:
 
 MINIO_ENDPOINT=minio-server:9000
 =======
-## Set environment variables
+Set environment variables
 Created a .env file in the root of the repo.
 MINIO_ENDPOINT=http://127.0.0.1:9000
 Mkhanyisi
@@ -66,7 +65,7 @@ MINIO_SECRET_KEY=minioadmin
 BUCKET_NAME=analytics-data
 
 
-## Deployment Steps
+Deployment Steps
 
 1. Make scripts executable:
 chmod +x bin/*.sh
@@ -78,17 +77,17 @@ bash bin/deploy.sh
 * Flask app health
 * Minio bucket accessible
 
-## Acces service
+ Acces service
 
 * Flask API: http://127.0.0.1:5000
 * Minio Console: http://127.0.0.1:9000
 
-## Health Check
+Health Check
 I used the health check script to verify Services:
 
 bash bin/health-check.sh
 
-## Expected output
+Expected output
 
 * Flask app is healthy
 * Minio bucket is accessible
