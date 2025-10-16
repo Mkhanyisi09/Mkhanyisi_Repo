@@ -11,7 +11,7 @@ The application is built using a modern containerized architecture with the foll
 2. **Minio Object Storage**
    - S3-compatible storage solution running in a Docker container (`minio-server`).
    - Stores all JSON data uploaded via the Flask API.
-   - Provides a web console for monitoring: `http://localhost:9000`.
+   - Provides a web console for monitoring: `(http://127.0.0.1:9000)`.
 
 3. **Docker Network**
    - `datahub-net` is a custom Docker bridge network.
