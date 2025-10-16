@@ -49,9 +49,9 @@ Repository & Branch
 
 Prerequisites
 
-Docker (Desktop recommended for Windows)
+Docker (Linux)
 
-Python 3.11+ (for tests)
+Python 3.14.0 (for tests)
 
 Git
 
