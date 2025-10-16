@@ -1,16 +1,17 @@
 ## Prerequisites
-- Windows 11 using Docker Desktop with WSL2 Linux Engine enabled
-- Docker installed and running
+- Docker Docker (Desktop with WSL2 Linux Engine)
 - Python 3.14.0
 - Git
 
-<<<<<<< HEAD
-Note: Due to limited access to a dedicated Linux environment, Docker Desktop with the Linux engine was used. This setup provides a Linux-like environment, ensuring all bash scripts and Docker containers behave consistently as they would on native Linux (Ubuntu 20.04+).
+  **Note:** The original assessment requested a Linux environment.
+  Due to limited resources, the stack has been tested and deployed on Windows 11 using Docker Desktop with WSL2 Linux Engine.  
+  All bash scripts, Docker images, and Minio storage are fully functional in this environment.  
+  The deployment scripts are designed to work without Docker Compose or Kubernetes, in line with the assessment requirements.
 
 ## DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
 =======
->>>>>>> Mkhanyisi
+Mkhanyisi
 
 ## Repository & Branch
 
