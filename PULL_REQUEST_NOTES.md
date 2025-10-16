@@ -1,4 +1,4 @@
-cat > PULL_REQUEST_NOTES.md << 'EOF'
+ PULL_REQUEST_NOTES.md 
 # City of Cape Town - DevOps Assessment Submission  
 **Candidate:** Mkhanyisi Ndlanga  
 **Date:** October 2025  
