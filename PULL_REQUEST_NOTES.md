@@ -1,7 +1,7 @@
  PULL_REQUEST_NOTES.md 
 # City of Cape Town - DevOps Assessment Submission  
 **Candidate:** Mkhanyisi Ndlanga  
-**Date:** October 2025  
+**Date:** 12 October 2025  
 
 ---
 
@@ -39,7 +39,7 @@
 
 
 ## Estimated Time Spent  
-Approx. **10–12 hours** including testing, debugging, and documentation.  
+Approx. **5.5 hours** including testing, debugging, and documentation.  
 
 ---
 
