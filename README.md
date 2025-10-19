@@ -1,24 +1,35 @@
-# Data Analytics Hub – S3 Data Service
+# City of Cape Town Assessment - Data Analytics Hub
 
-This repository contains the Data Analytics Hub – S3 Data Service, a containerized microservice designed to manage data ingestion, storage, and retrieval using Flask and MinIO (S3-compatible object storage).  
+This project contains a Flask-based analytics app with MinIO (S3-compatible) storage.  
 
-The project demonstrates modern DevOps principles including containerization, automation scripts, health checks, and testing.
+### Features
+- Flask REST API
+- MinIO object storage
+- Deployment scripts for Docker containers
+- Automated tests and health checks
+- Full virtual environment included (`venv/`)
 
-## Important Environment Note
+**Note:** The stack runs in a Linux environment provided by WSL2.  
+All bash scripts, Docker images, and MinIO storage are fully functional, and deployment does not require Docker Compose or Kubernetes.
 
-Environment Compatibility:
-This solution was developed and tested on Windows using Docker Desktop with the Linux (WSL2) engine enabled.
-This setup provides a Linux-like environment, ensuring that all bash scripts (deploy.sh, health-check.sh, test.sh) and Docker containers behave as they would on native Linux (Ubuntu 20.04+).
-The deployment is fully POSIX-compliant, and minimal adjustments may be required for file paths or permissions when running on other Linux distributions.
+### Project Structure
+Mkhanyisi_Repo/
+├── app/
+├── bin/
+├── logs/
+├── tests/
+├── venv/
+├── .env
+├── Dockerfile
+├── requirements.txt
+├── README.md
+└── DEPLOYMENT.md
 
 
-## Project Overview
+### Notes
+- `.env` and `venv/` are included for full reproducibility
+- Logs are written to `logs/`
 
-The **Data Analytics Hub – S3 Data Service** provides:
-- A Flask API for uploading, listing, and deleting analytical data files.
-- An integrated **MinIO server** acting as local S3 storage.
-- Automated deployment and health-check scripts.
-- Support for testing, logging, and container networking.
 
 ## Tech Stack
 
