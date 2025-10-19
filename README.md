@@ -35,18 +35,20 @@ The **Data Analytics Hub – S3 Data Service** provides:
 ## Repository Structure
 
 Mkhanyisi_Repo/
-├── bin/
-│ ├── deploy.sh # Deployment script
-│ ├── health-check.sh # Health validation script
-│ └── test.sh # Automated testing script
 ├── app/
-│ ├── main.py # Flask app entry point
-│ ├── s3_client.py # S3 connection and operations
-│ └── requirements.txt # Python dependencies
+├── bin/
 ├── logs/
-│ └── data-app/ # Application logs
-├── DEPLOYMENT.md # Full deployment documentation
-└── README.md # Project overview and quick start
+├── tests/
+├── venv/
+├── .env
+├── Dockerfile
+├── requirements.txt
+├── README.md
+└── DEPLOYMENT.md
+
+### Notes
+- `.env` and `venv/` are included for full reproducibility
+- Logs are written to `logs/`
 
 ## Architecture ( ASCII)
 
