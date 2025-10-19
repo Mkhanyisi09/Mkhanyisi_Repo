@@ -25,6 +25,20 @@ git clone https://github.com/Mkhanyisi09/Mkhanyisi_Repo.git
 cd Mkhanyisi_Repo
 git checkout Mkhanyisi
 
+## Project Structure
+
+Mkhanyisi_Repo/
+├── app/
+├── bin/
+├── logs/
+├── tests/
+├── venv/
+├── .env
+├── Dockerfile
+├── requirements.txt
+├── README.md
+└── DEPLOYMENT.md
+
 
 ## Network configuration: Ensure Docker networks exist (datahub-net created by deployment script)
 
