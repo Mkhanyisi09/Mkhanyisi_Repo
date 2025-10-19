@@ -3,10 +3,8 @@
 - Python 3.14.0
 - Git
 
-  **Note:** The original assessment requested a Linux environment.
-  Due to limited resources, the stack has been tested and deployed on Windows 11 using Docker Desktop with WSL2 Linux Engine.  
-  All bash scripts, Docker images, and Minio storage are fully functional in this environment.  
-  The deployment scripts are designed to work without Docker Compose or Kubernetes, in line with the assessment requirements.
+  Note: The stack runs in a Linux environment provided by WSL2.
+All bash scripts, Docker images, and MinIO storage are fully functional, and deployment does not require Docker Compose or Kubernetes.
 
 ## DEPLOYMENT.md
 Data Analytics Hub - Deployment Guide
