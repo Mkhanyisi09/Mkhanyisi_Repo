@@ -25,8 +25,35 @@
 ---
 
 ## Known Limitations / Future Improvements  
-- Local deployment only
-- Basic MinIO secrets (use secret manager in production) 
+1. Local Deployment Only
+
+The stack is designed for local testing and development.
+
+Production deployment may require cloud hosting, proper TLS, and scaling strategies.
+
+2. MinIO Secrets
+
+Credentials are currently stored in .env for simplicity.
+
+For production, use a secret manager or environment variables injected securely.
+
+3. Virtual Environment
+
+venv/ is included for full reproducibility.
+
+Consider using requirements.txt for lightweight deployments or CI/CD pipelines.
+
+4. No Orchestration (Docker Compose / Kubernetes)
+
+The stack runs as standalone containers.
+
+Future improvements could include Docker Compose or Kubernetes for multi-container management.
+
+5. Logging & Monitoring
+
+Logs are stored locally in logs/.
+
+Future enhancements could integrate structured logging, monitoring, and alerting (e.g., Prometheus, Grafana).
 
 ---
 
