@@ -11,6 +11,7 @@
 - Health-check script (`health-check.sh`) for Flask & MinIO
 - Unit tests in `tests/test_app.py` including environment variable validation
 - `.env` support for automatic MinIO credentials loading
+- Added `.env` and `venv/` to repository
 - Logging of tests for traceability
 
 ---
