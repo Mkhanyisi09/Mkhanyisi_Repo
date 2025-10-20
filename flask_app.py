@@ -36,11 +36,11 @@ def ensure_bucket(bucket_name):
     try:
         if not minio_client.bucket_exists(bucket_name):
             minio_client.make_bucket(bucket_name)
-            print(f"✅ Bucket '{bucket_name}' created")
+            print(f"Bucket '{bucket_name}' created")
         else:
             print(f"ℹ Bucket '{bucket_name}' already exists")
     except S3Error as e:
-        print(f"❌ MinIO error: {e}")
+        print(f"MinIO error: {e}")
 
 # Ensure bucket at startup
 ensure_bucket(BUCKET_NAME)
